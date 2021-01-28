@@ -35,7 +35,7 @@
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus" scoped>
-@import '../../common/stylus/minxins.styl'    //引入minxins.styl文件
+@import '../../common/stylus/mixins.styl'    //引入minxins.styl文件
 .footer-guide
   top-border-1px(green)   //混合
   display flex
@@ -44,6 +44,7 @@
   width 100%
   left 0
   bottom  0
+  background-color white
   .guide-item
     width 25%
     display flex
