@@ -3,7 +3,11 @@ import App from './App.vue'
 import 'lib-flexible'
 import router from './router/index.js'
 
+import Header from './components/Header/Header.vue'
+
 Vue.config.productionTip = false
+
+Vue.component('Header',Header)
 
 new Vue({
     // components:{

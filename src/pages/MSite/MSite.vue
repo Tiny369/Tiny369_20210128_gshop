@@ -1,17 +1,14 @@
 <template>
   <section class="msite">
     <!--首页头部-->
-    <header class="msite_header">
-      <span class="header_search">
-        <i class="iconfont icon-sousuo"></i>
-      </span>
-      <span class="header_title">
-        <span class="header_title_text ellipsis">昌平区北七家宏福科技园(337省道北)</span>
-      </span>
-      <span class="header_login">
-        <span class="header_login_text">登录|注册</span>
-      </span>
-    </header>
+    <Header title="昌平区北七家宏福科技园(337省道北)">
+        <span class="header_search" slot="left">
+          <i class="iconfont icon-sousuo"></i>
+        </span>
+        <span class="header_login" slot="right">
+          <span class="header_login_text">登录|注册</span>
+        </span> 
+    </Header>
     <!--首页导航-->
     <nav class="msite_nav">
       <div class="swiper-container">
@@ -117,7 +114,7 @@
             </a>
           </div>
         </div>
-        <!-- Add Pagination -->
+        <!-- Add Pagination 是否分页 -->
         <div class="swiper-pagination"></div>
       </div>
     </nav>
@@ -312,7 +309,27 @@
 </template>
 
 <script type="text/ecmascript-6">
-  export default {}
+  import Swiper from 'swiper'    //引入swiper 该swiper版本为5.2.1
+  import 'swiper/css/swiper.css'  //引入swiper的css样式 该swiper版本为5.2.1
+
+  export default {
+    mounted() {
+      // swiper对象必须要在列表数据显示之后创建
+      new Swiper ('.swiper-container', {
+        loop: true, // 循环模式选项
+        // 如果需要分页器
+        pagination: {
+          el: '.swiper-pagination',
+        },
+        //自动轮播
+        // autoplay:{
+        //   stopOnLastSlide:true,
+        //   delay: 500,
+        // },
+      })     
+    },
+
+  }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus" scoped>
@@ -320,45 +337,6 @@
 
   .msite  //首页
     width 100%
-    .msite_header
-      background-color #02a774
-      position fixed
-      z-index 100
-      left 0
-      top 0
-      width 100%
-      height 45px
-      .header_search
-        position absolute
-        left 15px
-        top 50%
-        transform translateY(-50%)
-        width 10%
-        height 50%
-        .icon-sousuo
-          font-size 25px
-          color #fff
-      .header_title
-        position absolute
-        top 50%
-        left 50%
-        transform translate(-50%, -50%)
-        width 50%
-        color #fff
-        text-align center
-        .header_title_text
-          font-size 20px
-          color #fff
-          display block
-      .header_login
-        font-size 14px
-        color #fff
-        position absolute
-        right 15px
-        top 50%
-        transform translateY(-50%)
-        .header_login_text
-          color #fff
     .msite_nav
       bottom-border-1px(#e4e4e4)
       margin-top 45px
