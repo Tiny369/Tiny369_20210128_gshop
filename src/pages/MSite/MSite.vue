@@ -315,6 +315,7 @@
   export default {
     mounted() {
       // swiper对象必须要在列表数据显示之后创建
+      // new Swiper (可以使用ref唯一标识技术, {
       new Swiper ('.swiper-container', {
         loop: true, // 循环模式选项
         // 如果需要分页器
