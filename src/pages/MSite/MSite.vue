@@ -1,7 +1,7 @@
 <template>
   <section class="msite">
     <!--首页头部-->
-    <Header title="昌平区北七家宏福科技园(337省道北)">
+    <Header :title="address.name || '定位中...' ">
         <span class="header_search" slot="left">
           <i class="iconfont icon-sousuo"></i>
         </span>
@@ -13,14 +13,16 @@
     <nav class="msite_nav">
       <div class="swiper-container">
         <div class="swiper-wrapper">
-          <div class="swiper-slide">
-            <a href="javascript:" class="link_to_food">
+          <div class="swiper-slide" v-for="(cs,index) in categorysArr2" :key="index">
+            <a href="javascript:" class="link_to_food" v-for="(c,index) in cs" :key="index">
               <div class="food_container">
-                <img src="./images/nav/1.jpg">
+                <!-- <img src="./images/nav/1.jpg"> -->
+                <img :src="'https://fuss10.elemecdn.com'+c.image_url">
               </div>
-              <span>甜品饮品</span>
+              <!-- <span>甜品饮品</span> -->
+              <span>{{c.title}}</span>
             </a>
-            <a href="javascript:" class="link_to_food">
+            <!-- <a href="javascript:" class="link_to_food">
               <div class="food_container">
                 <img src="./images/nav/2.jpg">
               </div>
@@ -61,9 +63,10 @@
                 <img src="./images/nav/8.jpg">
               </div>
               <span>土豪推荐</span>
-            </a>
+            </a> -->
           </div>
-          <div class="swiper-slide">
+
+          <!-- <div class="swiper-slide">
             <a href="javascript:" class="link_to_food">
               <div class="food_container">
                 <img src="./images/nav/9.jpg">
@@ -112,7 +115,8 @@
               </div>
               <span>土豪推荐</span>
             </a>
-          </div>
+          </div> -->
+        
         </div>
         <!-- Add Pagination 是否分页 -->
         <div class="swiper-pagination"></div>
@@ -125,19 +129,22 @@
         <span class="shop_header_title">附近商家</span>
       </div>
       <div class="shop_container">
-        <ul class="shop_list">
-          <li class="shop_li border-1px">
+        <ul class="shop_list" v-if="shops.length>0">
+          <!-- 遍历动态显示数据(商家列表) -->
+          <li class="shop_li border-1px" v-for="shop in shops" :key="shop.id">
             <a>
               <div class="shop_left">
-                <img class="shop_img" src="./images/shop/1.jpg">
+                <!-- <img class="shop_img" src="./images/shop/1.jpg"> -->
+                <img class="shop_img" :src="'https://fuss10.elemecdn.com'+shop.image_path">
               </div>
               <div class="shop_right">
                 <section class="shop_detail_header">
-                  <h4 class="shop_title ellipsis">锄禾日当午，汗滴禾下土</h4>
+                  <h4 class="shop_title ellipsis">{{shop.name}}</h4>
                   <ul class="shop_detail_ul">
-                    <li class="supports">保</li>
+                    <li class="supports" v-for="(support,index) in shop.supports" :key="index">{{support.icon_name}}</li>
+                    <!-- <li class="supports">保</li>
                     <li class="supports">准</li>
-                    <li class="supports">票</li>
+                    <li class="supports">票</li> -->
                   </ul>
                 </section>
                 <section class="shop_rating_order">
@@ -150,27 +157,33 @@
                       <span class="star-item off"></span>
                     </div>
                     <div class="rating_section">
-                      3.6
+                      <!-- 3.6 -->
+                      {{shop.rating}}
                     </div>
                     <div class="order_section">
-                      月售106单
+                      <!-- 月售106单 -->
+                      月售{{shop.recent_order_num}}单
                     </div>
                   </section>
                   <section class="shop_rating_order_right">
-                    <span class="delivery_style delivery_right">硅谷专送</span>
+                    <!-- <span class="delivery_style delivery_right">硅谷专送</span> -->
+                    <span class="delivery_style delivery_right">{{shop.delivery_mode.text}}</span>
                   </section>
                 </section>
                 <section class="shop_distance">
                   <p class="shop_delivery_msg">
-                    <span>¥20起送</span>
+                    <!-- <span>¥20起送</span> -->
+                    <span>¥{{shop.float_minimum_order_amount}}起送</span>
                     <span class="segmentation">/</span>
-                    <span>配送费约¥5</span>
+                    <!-- <span>配送费约¥5</span> -->
+                    <span>配送费约¥{{shop.float_delivery_fee}}</span>
                   </p>
                 </section>
               </div>
             </a>
           </li>
-          <li class="shop_li border-1px">
+          
+          <!-- <li class="shop_li border-1px">
             <a>
               <div class="shop_left">
                 <img class="shop_img" src="./images/shop/2.jpg">
@@ -301,7 +314,14 @@
                 </section>
               </div>
             </a>
-          </li>
+          </li> -->
+        
+        </ul>
+        <!-- 获取数据显示之前的轮廓 -->
+        <ul v-else>
+          <li><img src="./images/shop_back.svg" alt="loading"></li>
+          <li><img src="./images/shop_back.svg" alt="loading"></li>
+          <li><img src="./images/shop_back.svg" alt="loading"></li>
         </ul>
       </div>
     </div>
@@ -311,9 +331,62 @@
 <script type="text/ecmascript-6">
   import Swiper from 'swiper'    //引入swiper 该swiper版本为5.2.1
   import 'swiper/css/swiper.css'  //引入swiper的css样式 该swiper版本为5.2.1
+  import {mapState} from 'vuex'
+
+  
+  
+  // import _ from 'lodash'         //引入lodash库
+  import chunk from 'lodash/chunk'    //只打包引入的工具函数(按需引入) ---> 打包文件更小
+  
 
   export default {
+    
+    computed:{
+      ...mapState(['address','categorys','shops']),
+
+      /*
+      根据一维数组生成二维数组
+      包含所有分类的二维数组
+      内部小数组的长度最大是8
+      */
+     categorysArr() {
+      let {categorys} = this
+      //二维数组
+      let bigArr = []
+      let smallArr = []
+     //遍历总的一维数组
+     categorys.forEach(c => {
+      //将小数组放入大数组中(只保存一次)
+      if(smallArr.length === 0){
+        bigArr.push(smallArr)
+      }
+      //将c保存到小数组
+      smallArr.push(c)
+      //小数组的长度最大是8 ==> 如果小数组满,创建一个新的小数组
+      if(smallArr.length === 8){
+        smallArr = []
+      }
+     });
+     //返回二维数组
+      return bigArr
+     },
+
+     categorysArr2 (){
+      // return _.chunk(this.categorys,8)
+      return chunk(this.categorys,8)
+     },
+
+     
+     
+
+    },
+
     mounted() {
+      //分发异步action,将数据从后台请求到vuex中
+      this.$store.dispatch('getCategorys')
+      this.$store.dispatch('getShops')
+
+
       // swiper对象必须要在列表数据显示之后创建
       // new Swiper (可以使用ref唯一标识技术, {
       new Swiper ('.swiper-container', {
