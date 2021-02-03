@@ -30,7 +30,7 @@ export default {
     /*
     获取商品分类数组的异步action
     */
-    async getCategorys ({commit}){
+    async getCategorys ({commit},callback){
         // 发异步请求
         const result = await reqFoodsCategorys()
         // 请求成功后,提交给mutation
@@ -40,7 +40,9 @@ export default {
              * result的data是后台工程师定义的
              */
             const categorys = result.data
-            commit(RECEIVE_CATEGORYS,categorys)
+            commit(RECEIVE_CATEGORYS,categorys)     //内部同步调用mutation更新状态数据
+            //在数据更新之后调用回调函数
+            typeof callback === 'function' && callback()
         }
     },
 
