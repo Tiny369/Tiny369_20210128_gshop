@@ -18,7 +18,14 @@
                         <section class="login_message">
                             <input type="tel" maxlength="11" placeholder="手机号" v-model="phone">
                             <!-- <button disabled="disabled" class="get_verification">获取验证码</button> -->
-                            <button :disabled="!isRightPhone" class="get_verification" :class="{right_phone_number:isRightPhone}" @click.prevent="senCode">获取验证码</button>
+                            <!-- <button :disabled="!isRightPhone" class="get_verification" :class="{right_phone_number:isRightPhone}" @click.prevent="senCode">获取验证码</button> -->
+                            <button 
+                            :disabled="!isRightPhone || computeTime>0 " 
+                            class="get_verification" 
+                            :class="{right_phone_number:isRightPhone}" 
+                            @click.prevent="senCode">
+                            {{computeTime>0 ? `短信已发送(${computeTime}s)` : '发送验证码'}}
+                            </button>
                         </section>
                         <section class="login_verification">
                             <input type="tel" maxlength="8" placeholder="验证码">
@@ -47,7 +54,12 @@
                             </section>
                             <section class="login_message">
                                 <input type="text" maxlength="11" placeholder="验证码">
-                                <img class="get_verification" src="./images/captcha.svg" alt="captcha">
+                                <!-- <img class="get_verification" src="./images/captcha.svg" alt="captcha"> -->
+
+                                <!-- 当前发送是一个跨域的http请求(不是ajaxi求),没有跨域的问题 -->
+                                <img class="get_verification" src="http://localhost:4000/captcha" alt="captcha" @click="updateCaptcha" ref="captcha">
+                                <!-- 原本404,利用代理服务器转发请求4000的后台按口-->
+                                <!-- <img class="get_verification" src="/api/captcha" alt="captcha" > -->
                             </section>
                         </section>
                     </div>
@@ -70,6 +82,7 @@
         return {
           isShowSms:true,   //true:显示短信登录界面,false:显示密码登录界面
           phone:'',
+          computeTime:0,  // 计时剩余时间
           isShowPwd:false // 密码是否可见
         }
       },
@@ -81,11 +94,24 @@
           return /^1\d{10}$/.test(this.phone)
         },
       },
-
+      
       methods: {
         senCode (){
-          alert('tiny')
-        }
+          // 进行倒计时效果显示
+          this.computeTime = 10
+          const intervalId = setInterval(() => {
+            this.computeTime--
+            if(this.computeTime === 0){
+              clearInterval(intervalId)
+            }
+          }, 1000);
+          // alert('tiny')
+
+          //发请求
+        },
+        updateCaptcha (){
+          this.$refs.captcha.src = 'http://localhost:4000/captcha?time='+ Date.now()    //每次需要更新src地址
+        },
       },
 
     }

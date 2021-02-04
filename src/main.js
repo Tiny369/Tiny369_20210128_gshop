@@ -1,14 +1,19 @@
 import Vue from 'vue'
-import App from './App.vue'
 import 'lib-flexible'
-import router from './router/index.js'
 
+import App from './App.vue'
+import router from './router/index.js'
 import Header from './components/Header/Header.vue'
+import Star from './components/Star/Star.vue'
 import store from './vuex/store.js'
 
-Vue.config.productionTip = false
 
+
+//取消生产环境的提示
+Vue.config.productionTip = false
+//注册全局组件
 Vue.component('Header',Header)
+Vue.component('Star',Star)
 
 new Vue({
     // components:{

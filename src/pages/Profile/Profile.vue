@@ -106,6 +106,7 @@
 
   .profile //我的
     width 100%
+    overflow hidden
     // Header
     //   border 1px solid white
     // .header

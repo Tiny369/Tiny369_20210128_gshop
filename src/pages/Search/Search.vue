@@ -24,6 +24,7 @@
 
   .search  //搜索
     width 100%
+    overflow hidden
     // .header
     //   background-color #02a774
     //   position fixed
