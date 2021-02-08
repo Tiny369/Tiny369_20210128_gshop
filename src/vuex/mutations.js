@@ -4,7 +4,7 @@
  */
 
  //引入常量
-import {RECEIVE_ADDRESS,RECEIVE_CATEGORYS,RECEIVE_SHOPS} from './mutation-types.js'
+import {RECEIVE_ADDRESS,RECEIVE_CATEGORYS,RECEIVE_SHOPS,RECEIVE_TOKEN,RECEIVE_USER} from './mutation-types.js'
 
 
  export default {
@@ -16,5 +16,12 @@ import {RECEIVE_ADDRESS,RECEIVE_CATEGORYS,RECEIVE_SHOPS} from './mutation-types.
     },
     [RECEIVE_SHOPS] (state,shops){
         state.shops = shops
+    },
+
+    [RECEIVE_TOKEN] (state,{token}){
+        state.token = token
+    },
+    [RECEIVE_USER] (state,{user}){
+        state.user = user
     },
  }

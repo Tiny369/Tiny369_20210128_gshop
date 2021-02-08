@@ -17,3 +17,19 @@ export const reqShops = ({latitude,longitude}) => axios('/shops',{
         longitude 
     }
 })
+
+// 4、发送短信验证码
+export const reqSendCode = (phone) => axios.get('/sendcode',{
+    // url:'/sendcode'
+    params:{
+        phone
+    }
+})
+
+// 5、用户名密码登陆
+export const reqPwdLogin = ({name,pwd,captcha}) => axios.post('/login_pwd',{name,pwd,captcha})
+
+// 6、手机号验证码登陆
+export const reqSmsLogin = ({phone,code}) => axios.post('/login_sms',{phone,code})
+
+

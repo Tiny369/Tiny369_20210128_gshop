@@ -6,18 +6,21 @@
       </a>
     </header> -->
     <Header style="border:0.026rem solid white" class="Header" title="我 的"></Header>
-    <section class="profile-number" @click="$router.push('/login')">
+    <!-- <section class="profile-number" @click="$router.push('/login')"> -->
+    <section class="profile-number" @click="$router.push(user._id ? '/userInfo' : '/login')">
       <a href="javascript:" class="profile-link">
         <div class="profile_image">
           <i class="iconfont icon-person"></i>
         </div>
         <div class="user-info">
-          <p class="user-info-top">登录/注册</p>
-          <p>
+          <!-- <p class="user-info-top">登录/注册</p> -->
+          <p class="user-info-top" v-if="!user.phone">{{user.name ? user.name:'登录/注册'}}</p>
+          <p v-if="!user.name">
             <span class="user-icon">
               <i class="iconfont icon-shouji icon-mobile"></i>
             </span>
-            <span class="icon-mobile-number">暂无绑定手机号</span>
+            <!-- <span class="icon-mobile-number">暂无绑定手机号</span> -->
+            <span class="icon-mobile-number">{{user.phone ? user.phone:'暂无绑定手机号'}}</span>
           </p>
         </div>
         <span class="arrow">
@@ -97,7 +100,11 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import {mapState} from 'vuex'
   export default {
+    computed:{
+      ...mapState(['user'])
+    },
   }
 </script>
 

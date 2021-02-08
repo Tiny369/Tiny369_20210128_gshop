@@ -1,3 +1,4 @@
+
 /**
  * 包含N个用于间接更新状态数据的方法的对象
  * 方法可以包含异步和逻辑处理代码
@@ -6,7 +7,7 @@
  // 引入接口请求函数
  import {reqAddress,reqFoodsCategorys,reqShops} from '../api/index.js'
  //引入常量
- import {RECEIVE_ADDRESS,RECEIVE_CATEGORYS,RECEIVE_SHOPS} from './mutation-types.js'
+ import {RECEIVE_ADDRESS,RECEIVE_CATEGORYS,RECEIVE_SHOPS,RECEIVE_TOKEN,RECEIVE_USER} from './mutation-types.js'
 
 export default {
     /*
@@ -63,5 +64,22 @@ export default {
             commit(RECEIVE_SHOPS,shops)
         }
     },
+
+    /**
+     * 保存用户
+     */
+    saveUser({commit},user) {
+        const token = user.token
+        // 将token保存local
+        localStorage.setItem('token_key',token)
+        
+        delete user.token   //删除user内部的token
+        // 将token保存到state
+        commit(RECEIVE_USER,{user})
+        // 将user保存到state
+        commit(RECEIVE_TOKEN,{token})
+    },
+
+    
 
 }

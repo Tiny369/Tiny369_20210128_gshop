@@ -16,19 +16,17 @@
                     <!-- <div class="on"> -->
                     <div :class="{on:isShowSms}" @click="isShowSms=true">
                         <section class="login_message">
-                            <input type="tel" maxlength="11" placeholder="手机号" v-model="phone">
+                            <input type="tel" maxlength="11" placeholder="手机号" v-model="phone" name='phone' v-validate="'required|mobile'">
                             <!-- <button disabled="disabled" class="get_verification">获取验证码</button> -->
                             <!-- <button :disabled="!isRightPhone" class="get_verification" :class="{right_phone_number:isRightPhone}" @click.prevent="senCode">获取验证码</button> -->
-                            <button 
-                            :disabled="!isRightPhone || computeTime>0 " 
-                            class="get_verification" 
-                            :class="{right_phone_number:isRightPhone}" 
-                            @click.prevent="senCode">
+                            <button :disabled="!isRightPhone || computeTime>0 " class="get_verification" :class="{right_phone_number:isRightPhone}" @click.prevent="senCode">
                             {{computeTime>0 ? `短信已发送(${computeTime}s)` : '发送验证码'}}
                             </button>
+                            <span style="color: red;" v-show="errors.has('phone')">{{ errors.first('phone') }}</span>
                         </section>
                         <section class="login_verification">
-                            <input type="tel" maxlength="8" placeholder="验证码">
+                            <input type="tel" maxlength="6" placeholder="验证码" v-model="code" name="code" v-validate="{required: true,regex: /^\d{6}$/}">
+                            <span style="color: red;" v-show="errors.has('code')">{{ errors.first('code') }}</span>
                         </section>
                         <section class="login_hint">
                             温馨提示：未注册硅谷外卖帐号的手机号，登录时将自动注册，且代表已同意
@@ -39,31 +37,34 @@
                     <div :class="{on:!isShowSms}" @click="isShowSms=false">
                         <section>
                             <section class="login_message">
-                                <input type="tel" maxlength="11" placeholder="手机/邮箱/用户名">
+                                <input type="tel" maxlength="11" placeholder="手机/邮箱/用户名" v-model="name" name="name" v-validate="'required'">
+                                <span style="color: red;" v-show="errors.has('name')">{{ errors.first('name') }}</span>
                             </section>
                             <section class="login_verification">
-                                <!-- <input type="tel" maxlength="8" placeholder="密码"> -->
-                                <input :type="isShowPwd ? 'text' : 'password' "  maxlength="8" placeholder="密码">
-                                <!-- <div class="switch_button off"> -->
-                                <div class="switch_button" :class="isShowPwd ? 'on' : 'off' " @click="isShowPwd = !isShowPwd">
-                                    <!-- <div class="switch_circle"></div> -->
-                                    <div class="switch_circle" :class="{right:isShowPwd}"></div>
-                                    <!-- <span class="switch_text">...</span> -->
-                                    <span class="switch_text">{{isShowPwd ? 'abc' : ''}}</span>
-                                </div>
+                              <!-- <input type="tel" maxlength="8" placeholder="密码"> -->
+                              <input :type="isShowPwd ? 'text' : 'password' "  maxlength="8" placeholder="密码" v-model="pwd" name="pwd" v-validate="'required'">
+                              <!-- <div class="switch_button off"> -->
+                              <div class="switch_button" :class="isShowPwd ? 'on' : 'off' " @click="isShowPwd = !isShowPwd">
+                                  <!-- <div class="switch_circle"></div> -->
+                                  <div class="switch_circle" :class="{right:isShowPwd}"></div>
+                                  <!-- <span class="switch_text">...</span> -->
+                                  <span class="switch_text">{{isShowPwd ? 'abc' : ''}}</span>
+                              </div>
+                              <span style="color: red;" v-show="errors.has('pwd')">{{ errors.first('pwd') }}</span>
                             </section>
                             <section class="login_message">
-                                <input type="text" maxlength="11" placeholder="验证码">
+                                <input type="text" maxlength="4" placeholder="验证码" v-model="captcha" name="captcha" v-validate="{required: true,regex: /^[0-9a-zA-Z]{4}$/}">
                                 <!-- <img class="get_verification" src="./images/captcha.svg" alt="captcha"> -->
 
                                 <!-- 当前发送是一个跨域的http请求(不是ajaxi求),没有跨域的问题 -->
                                 <img class="get_verification" src="http://localhost:4000/captcha" alt="captcha" @click="updateCaptcha" ref="captcha">
                                 <!-- 原本404,利用代理服务器转发请求4000的后台按口-->
                                 <!-- <img class="get_verification" src="/api/captcha" alt="captcha" > -->
+                                <span style="color: red;" v-show="errors.has('captcha')">{{ errors.first('captcha') }}</span>
                             </section>
                         </section>
                     </div>
-                    <button class="login_submit">登录</button>
+                    <button class="login_submit" @click.prevent="login">登录</button>
                 </form>
                 <a href="javascript:;" class="about_us">关于我们</a>
             </div>
@@ -75,6 +76,9 @@
 </template>
 
 <script type="text/ecmascript-6">
+    // import {reqSendCode} from '../../api/index.js'
+    import { Toast, MessageBox } from 'mint-ui'
+
     export default {
       name:'Login',
 
@@ -82,6 +86,10 @@
         return {
           isShowSms:true,   //true:显示短信登录界面,false:显示密码登录界面
           phone:'',
+          code: '', 
+          name: '', 
+          pwd: '', 
+          captcha: '',
           computeTime:0,  // 计时剩余时间
           isShowPwd:false // 密码是否可见
         }
@@ -96,7 +104,7 @@
       },
       
       methods: {
-        senCode (){
+        async senCode (){
           // 进行倒计时效果显示
           this.computeTime = 10
           const intervalId = setInterval(() => {
@@ -105,13 +113,58 @@
               clearInterval(intervalId)
             }
           }, 1000);
-          // alert('tiny')
-
           //发请求
+          // const result = await reqSendCode(this.phone)
+          const result = await this.$API.reqSendCode(this.phone)
+          if (result.code === 0) {
+            Toast('短信发送成功!')
+          } else {
+            // 停止计时
+            this.computeTime = 0
+            MessageBox('提示', result.msg || '发送失败');
+          }
         },
+
         updateCaptcha (){
           this.$refs.captcha.src = 'http://localhost:4000/captcha?time='+ Date.now()    //每次需要更新src地址
         },
+
+        async login () {
+          let names
+          if (this.isShowSms) {
+            names = ['phone', 'code']
+          } else {
+            names = ['name', 'pwd', 'captcha',]
+            
+          }
+          const success = await this.$validator.validateAll(names) // 对指定的所有表单项进行验证
+          // 如果验证通过了，发送登录的请求
+          let result  
+          if (success) {
+            let {isShowPwd,phone,code,name,pwd,captcha} = this
+            if(isShowPwd){  
+              // 短信登录
+              result = await this.$API.reqSmsLogin({phone,code})
+            }else{  
+              // 密码登录
+              result = await this.$API.reqPwdLogin({name,pwd,captcha})
+              this.updateCaptcha()  // 更新图形验证码
+              this.captcha = ''
+            }
+          }
+          // 根据请求的结果，做不同响应处理
+          if(result.code === 0){
+            const user = result.data
+            //将user保存到vuex的state
+            this.$store.dispatch('saveUser',user) //将user和token保存到state，将token保存local
+
+            //跳转到个人中心
+            this.$router.replace({path:'/profile'})
+          }else{
+            MessageBox('提示',result.msg)
+          }
+        },
+
       },
 
     }
