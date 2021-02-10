@@ -5,9 +5,9 @@
  */
 
  // 引入接口请求函数
- import {reqAddress,reqFoodsCategorys,reqShops} from '../api/index.js'
+ import {reqAddress,reqFoodsCategorys,reqShops,reqAutoLogin} from '../api/index.js'
  //引入常量
- import {RECEIVE_ADDRESS,RECEIVE_CATEGORYS,RECEIVE_SHOPS,RECEIVE_TOKEN,RECEIVE_USER} from './mutation-types.js'
+ import {RECEIVE_ADDRESS,RECEIVE_CATEGORYS,RECEIVE_SHOPS,RECEIVE_TOKEN,RECEIVE_USER,RESET_USER,RESET_TOKEN} from './mutation-types.js'
 
 export default {
     /*
@@ -80,6 +80,24 @@ export default {
         commit(RECEIVE_TOKEN,{token})
     },
 
-    
+    /**
+     * 自动登录的异步action
+     */
+    async autoLogin ({commit,state}) {
+        if(state.token && !state.user._id){     // 必须要有token且没有user信息
+            // 发送自动登录的请求
+            let result = await reqAutoLogin()
+            if(result.code === 0){
+                let user = result.data  // 没有token
+                commit(RECEIVE_USER,{user})
+            }
+        }
+    },
+
+    logout ({commit}) {
+        localStorage.removeItem('token_key')
+        commit(RESET_USER)
+        commit(RESET_TOKEN)
+    }
 
 }

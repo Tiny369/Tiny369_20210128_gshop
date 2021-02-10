@@ -13,8 +13,8 @@
  Vue.use(Vuex)      //使用vuex
 
  export default new Vuex.Store({
-    state,
-    mutations,
-    actions,
-    getters
+   state,
+   mutations,
+   actions,
+   getters
  })

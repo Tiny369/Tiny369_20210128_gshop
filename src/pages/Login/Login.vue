@@ -135,14 +135,13 @@
             names = ['phone', 'code']
           } else {
             names = ['name', 'pwd', 'captcha',]
-            
           }
           const success = await this.$validator.validateAll(names) // 对指定的所有表单项进行验证
           // 如果验证通过了，发送登录的请求
           let result  
           if (success) {
-            let {isShowPwd,phone,code,name,pwd,captcha} = this
-            if(isShowPwd){  
+            let {isShowSms,phone,code,name,pwd,captcha} = this
+            if(isShowSms){  
               // 短信登录
               result = await this.$API.reqSmsLogin({phone,code})
             }else{  

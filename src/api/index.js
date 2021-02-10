@@ -8,13 +8,27 @@ import axios from './ajax.js'
 export const reqAddress = (latitude,longitude)=> axios(`/position/${latitude},${longitude}`)
 
 // 2、获取食品分类列表
-export const reqFoodsCategorys = () => axios('/index_category')
+// export const reqFoodsCategorys = () => axios('/index_category')
+export const reqFoodsCategorys = () => axios('/index_category',{
+    headers:{
+        needCheck:true
+    }
+})
 
 // 3、根据经纬度获取商铺列表
+// export const reqShops = ({latitude,longitude}) => axios('/shops',{
+//     params:{ 
+//         latitude,
+//         longitude 
+//     }
+// })
 export const reqShops = ({latitude,longitude}) => axios('/shops',{
     params:{ 
         latitude,
         longitude 
+    },
+    headers:{
+        needCheck:true
     }
 })
 
@@ -31,5 +45,8 @@ export const reqPwdLogin = ({name,pwd,captcha}) => axios.post('/login_pwd',{name
 
 // 6、手机号验证码登陆
 export const reqSmsLogin = ({phone,code}) => axios.post('/login_sms',{phone,code})
+
+// 7、自动登陆
+export const reqAutoLogin = () => axios.get('/auto_login')
 
 
