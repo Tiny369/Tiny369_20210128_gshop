@@ -4,6 +4,7 @@
 
 import axios from './ajax.js'
 
+
 // 1、根据经纬度获取位置详情
 export const reqAddress = (latitude,longitude)=> axios(`/position/${latitude},${longitude}`)
 
@@ -48,5 +49,21 @@ export const reqSmsLogin = ({phone,code}) => axios.post('/login_sms',{phone,code
 
 // 7、自动登陆
 export const reqAutoLogin = () => axios.get('/auto_login')
+
+/*
+// test mock  getDate
+axios.get('/info').then(result=>{
+    console.log('result',result);
+})
+*/
+
+//获取goods
+export const reqGoods =  ()=>axios.get('/goods')
+
+//获取ratings
+export const reqRatings =  ()=>axios.get('/ratings')
+
+//获取info
+export const reqInfo =  ()=>axios.get('/info')
 
 

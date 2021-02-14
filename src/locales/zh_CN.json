@@ -1,0 +1,13 @@
+{
+  "login_aboutUs": "关于我们",
+  "login_login": "登陆",
+  "footer_home": "首页",
+  "footer_search": "搜索",
+  "footer_order": "订单",
+  "footer_own": "我的",
+  "login_logo":"Tiny外卖",
+  "login_sms":"短信登录",
+  "login_pwd":"密码登录",
+  "login_phone_number":"手机号",
+  "login_v_code":"验证码"
+}

@@ -131,7 +131,7 @@
       <div class="shop_container">
         <ul class="shop_list" v-if="shops.length>0">
           <!-- 遍历动态显示数据(商家列表) -->
-          <li class="shop_li border-1px" v-for="shop in shops" :key="shop.id">
+          <li class="shop_li border-1px" v-for="shop in shops" :key="shop.id" @click="$router.push('/shop')">
             <a>
               <div class="shop_left">
                 <!-- <img class="shop_img" src="./images/shop/1.jpg"> -->

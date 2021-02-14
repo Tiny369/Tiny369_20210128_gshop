@@ -5,9 +5,9 @@
  */
 
  // 引入接口请求函数
- import {reqAddress,reqFoodsCategorys,reqShops,reqAutoLogin} from '../api/index.js'
+ import {reqAddress,reqFoodsCategorys,reqShops,reqAutoLogin,reqGoods,reqRatings,reqInfo} from '../api/index.js'
  //引入常量
- import {RECEIVE_ADDRESS,RECEIVE_CATEGORYS,RECEIVE_SHOPS,RECEIVE_TOKEN,RECEIVE_USER,RESET_USER,RESET_TOKEN} from './mutation-types.js'
+ import {RECEIVE_ADDRESS,RECEIVE_CATEGORYS,RECEIVE_SHOPS,RECEIVE_TOKEN,RECEIVE_USER,RESET_USER,RESET_TOKEN,RECEIVE_GOODS,RECEIVE_RATINGS,RECEIVE_INFO} from './mutation-types.js'
 
 export default {
     /*
@@ -98,6 +98,34 @@ export default {
         localStorage.removeItem('token_key')
         commit(RESET_USER)
         commit(RESET_TOKEN)
-    }
+    },
+
+    // 异步获取商家商品列表
+    async getGoods ({commit},cb){
+        let result = await reqGoods()
+        if(result.code === 0){
+            let goods = result.data
+            commit(RECEIVE_GOODS,{goods})
+            typeof cb === 'function' && cb()
+        }
+    },
+    // 异步获取商家评价列表
+    async getRatings ({commit},cb){
+        let result = await reqRatings()
+        if(result.code === 0){
+            let ratings = result.data
+            commit(RECEIVE_RATINGS,{ratings})
+            typeof cb === 'function' && cb()
+        }
+    },
+    // 异步获取商家信息
+    async getInfo ({commit},cb){
+        let result = await reqInfo()
+        if(result.code === 0){
+            let info = result.data
+            commit(RECEIVE_INFO,{info})
+            typeof cb === 'function' && cb()
+        }
+    },
 
 }

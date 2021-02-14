@@ -2,12 +2,16 @@
     <section class="loginContainer">
         <div class="loginInner">
             <div class="login_header">
-                <h2 class="login_logo">硅谷外卖</h2>
+                <!-- <h2 class="login_logo">硅谷外卖</h2> -->
+                <!-- <h2 class="login_logo">Tiny外卖</h2> -->
+                <h2 class="login_logo">{{$t('login_logo')}}</h2>
                 <div class="login_header_title">
                     <!-- <a href="javascript:;" class="on">短信登录</a> -->
-                    <a href="javascript:;" :class="{on:isShowSms}" @click="isShowSms=true">短信登录</a>
+                    <!-- <a href="javascript:;" :class="{on:isShowSms}" @click="isShowSms=true">短信登录</a> -->
+                    <a href="javascript:;" :class="{on:isShowSms}" @click="isShowSms=true">{{$t('login_sms')}}</a>
                     <!-- <a href="javascript:;">密码登录</a> -->
-                    <a href="javascript:;" :class="{on:!isShowSms}" @click="isShowSms=false">密码登录</a>
+                    <!-- <a href="javascript:;" :class="{on:!isShowSms}" @click="isShowSms=false">密码登录</a> -->
+                    <a href="javascript:;" :class="{on:!isShowSms}" @click="isShowSms=false">{{$t('login_pwd')}}</a>
                     
                 </div>
             </div>
@@ -16,7 +20,8 @@
                     <!-- <div class="on"> -->
                     <div :class="{on:isShowSms}" @click="isShowSms=true">
                         <section class="login_message">
-                            <input type="tel" maxlength="11" placeholder="手机号" v-model="phone" name='phone' v-validate="'required|mobile'">
+                            <!-- <input type="tel" maxlength="11" placeholder="手机号" v-model="phone" name='phone' v-validate="'required|mobile'"> -->
+                            <input type="tel" maxlength="11" :placeholder="$t('login_phone_number')" v-model="phone" name='phone' v-validate="'required|mobile'">
                             <!-- <button disabled="disabled" class="get_verification">获取验证码</button> -->
                             <!-- <button :disabled="!isRightPhone" class="get_verification" :class="{right_phone_number:isRightPhone}" @click.prevent="senCode">获取验证码</button> -->
                             <button :disabled="!isRightPhone || computeTime>0 " class="get_verification" :class="{right_phone_number:isRightPhone}" @click.prevent="senCode">
@@ -25,7 +30,8 @@
                             <span style="color: red;" v-show="errors.has('phone')">{{ errors.first('phone') }}</span>
                         </section>
                         <section class="login_verification">
-                            <input type="tel" maxlength="6" placeholder="验证码" v-model="code" name="code" v-validate="{required: true,regex: /^\d{6}$/}">
+                            <!-- <input type="tel" maxlength="6" placeholder="验证码" v-model="code" name="code" v-validate="{required: true,regex: /^\d{6}$/}"> -->
+                            <input type="tel" maxlength="6" :placeholder="$t('login_v_code')" v-model="code" name="code" v-validate="{required: true,regex: /^\d{6}$/}">
                             <span style="color: red;" v-show="errors.has('code')">{{ errors.first('code') }}</span>
                         </section>
                         <section class="login_hint">
@@ -64,13 +70,16 @@
                             </section>
                         </section>
                     </div>
-                    <button class="login_submit" @click.prevent="login">登录</button>
+                    <!-- <button class="login_submit" @click.prevent="login">登录</button> -->
+                    <button class="login_submit" @click.prevent="login">{{$t('login_login')}}</button>
                 </form>
-                <a href="javascript:;" class="about_us">关于我们</a>
+                <!-- <a href="javascript:;" class="about_us">关于我们</a> -->
+                <a href="javascript:;" class="about_us">{{$t('login_aboutUs')}}</a>
             </div>
-            <a href="javascript:" class="go_back" @click="$router.back()">
+            <a href="javascript:" class="go_back" @click="$router.replace('/profile')">
                 <i class="iconfont icon-jiantou2"></i>
             </a>
+            <button @click="toggleLanguage">切换语言</button>
         </div>
     </section>
 </template>
@@ -127,6 +136,15 @@
 
         updateCaptcha (){
           this.$refs.captcha.src = 'http://localhost:4000/captcha?time='+ Date.now()    //每次需要更新src地址
+        },
+        
+        toggleLanguage () {
+          // 根据当前语言得到新的语言
+          const locale = this.$i18n.locale==='en' ? 'zh_CN' : 'en'
+          // 指定新的语言
+          this.$i18n.locale = locale
+          // 将新的语言保存到local
+          localStorage.setItem('locale_key', locale)
         },
 
         async login () {

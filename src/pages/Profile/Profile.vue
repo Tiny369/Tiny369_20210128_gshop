@@ -96,14 +96,26 @@
         </div>
       </a>
     </section>
+    <section class="profile_my_order border-1px" v-show="user._id">
+     <mt-button type="danger" style="width:100%" @click="logout">退出登录</mt-button>
+    </section>
   </section>
 </template>
 
 <script type="text/ecmascript-6">
   import {mapState} from 'vuex'
+  import { MessageBox  } from 'mint-ui'
   export default {
     computed:{
       ...mapState(['user'])
+    },
+    methods: {
+      logout (){
+        MessageBox.confirm('确定执行此操作?').then(
+          ()=>{this.$store.dispatch('logout')},
+          ()=>{console.log('点击取消');}
+        )
+      }
     },
   }
 </script>
@@ -194,6 +206,7 @@
                 font-size 30px
                 vertical-align text-top
             .icon-mobile-number
+              margin-left 6px
               font-size 14px
               color #fff
         .arrow
