@@ -1,10 +1,10 @@
 <template>
 <div>
   <div class="goods">
-    <div class="menu-wrapper">
+    <div class="menu-wrapper" ref="left">
       <ul>
         <!-- <li class="menu-item current"> -->
-        <li class="menu-item" v-for="(good,index) in goods" :key="index">
+        <li class="menu-item" v-for="(good,index) in goods" :key="index" :class="{current:index===currentIndex}">
           <span class="text bottom-border-1px">
             <!-- <img class="icon" src="https://fuss10.elemecdn.com/0/6a/05b267f338acfeb8bd682d16e836dpng.png"> -->
             <img class="icon" :src="good.icon" v-if="good.icon">
@@ -20,8 +20,8 @@
         </li> -->
       </ul>
     </div>
-    <div class="foods-wrapper">
-      <ul>
+    <div class="foods-wrapper" ref="right">
+      <ul ref="rightUl">
         <li class="food-list-hook" v-for="(good,index) in goods" :key="index">
           <!-- <h1 class="title">折扣</h1> -->
           <h1 class="title">{{good.name}}</h1>
@@ -106,10 +106,75 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import BScroll from 'better-scroll'
   import {mapState} from 'vuex'
   export default {
+    data() {
+      return {
+        // 1)、右侧列表滑动的Y轴坐标: scrollY  在华东中过程中不断改变
+        scrollY:0,
+        // 2)、右侧每个分类<li>的top值的数组tops：第一次列表显示后统计后面不再变化
+        tops:[]
+      }
+    },
+    methods: {
+      // 初始化滑动
+      initScroll (){
+        new BScroll(this.$refs.left,{})
+        let rightScroll = new BScroll(this.$refs.right,{
+          probeType:1,  // 非实时 / 触摸
+          // probeType:2,  // 实时 / 触摸
+          // probeType:3,  // 实时 / 触摸 / 惯性 / 编码
+        })
+
+        //给右侧列表绑定scroll监听
+        rightScroll.on('scroll',({x,y})=>{
+          console.log('scroll',x,y);
+          this.scrollY = Math.abs(y)
+        })
+        rightScroll.on('scrollEnd',({x,y})=>{
+          console.log('scrollEnd',x,y);
+          this.scrollY = Math.abs(y)
+        })
+      },
+      /**
+       * 统计右侧所有分类1i的top的数组
+       */
+      initTops (){
+        let tops = []
+        let top = 0
+        tops.push(top)
+        // Array.from()
+        let lis = Array.prototype.slice.call(this.$refs.rightUl.children)
+        lis.forEach(li => {
+          top += li.clientHeight
+          tops.push(top)
+        });
+        // 更新tops数据
+        this.tops = tops
+        console.log('tops',tops);
+      },
+    },
     computed:{
-      ...mapState(['goods'])
+      ...mapState(['goods']),
+      currentIndex (){
+        let {scrollY,tops} = this
+        return tops.findIndex((top,index)=>{ return scrollY >= top && scrollY < tops[index+1]})
+      },
+    },
+    /* mounted() {
+      new BScroll(this.$refs.left)
+      new BScroll(this.$refs.right)
+    }, */
+    watch:{
+      goods (){   // goods数据有了
+        this.$nextTick(()=>{    // 列表数据显示了
+          /* new BScroll(this.$refs.left)
+          new BScroll(this.$refs.right) */
+          this.initScroll() // 初始化滑动
+          this.initTops()
+        })
+      },
     },
   }
 </script>
