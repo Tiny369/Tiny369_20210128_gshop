@@ -2,9 +2,9 @@
 <div>
   <div class="goods">
     <div class="menu-wrapper" ref="left">
-      <ul>
+      <ul ref="leftUl">
         <!-- <li class="menu-item current"> -->
-        <li class="menu-item" v-for="(good,index) in goods" :key="index" :class="{current:index===currentIndex}">
+        <li class="menu-item" v-for="(good,index) in goods" :key="index" :class="{current:index===currentIndex}" @click="clickItem(index)">
           <span class="text bottom-border-1px">
             <!-- <img class="icon" src="https://fuss10.elemecdn.com/0/6a/05b267f338acfeb8bd682d16e836dpng.png"> -->
             <img class="icon" :src="good.icon" v-if="good.icon">
@@ -119,20 +119,21 @@
     },
     methods: {
       // 初始化滑动
-      initScroll (){
-        new BScroll(this.$refs.left,{})
-        let rightScroll = new BScroll(this.$refs.right,{
+      _initScroll (){
+        this.leftScroll = new BScroll(this.$refs.left,{})
+        this.rightScroll = new BScroll(this.$refs.right,{
+          click:true, // 分发自定义的click事件
           probeType:1,  // 非实时 / 触摸
           // probeType:2,  // 实时 / 触摸
           // probeType:3,  // 实时 / 触摸 / 惯性 / 编码
         })
 
         //给右侧列表绑定scroll监听
-        rightScroll.on('scroll',({x,y})=>{
+        this.rightScroll.on('scroll',({x,y})=>{
           console.log('scroll',x,y);
           this.scrollY = Math.abs(y)
         })
-        rightScroll.on('scrollEnd',({x,y})=>{
+        this.rightScroll.on('scrollEnd',({x,y})=>{
           console.log('scrollEnd',x,y);
           this.scrollY = Math.abs(y)
         })
@@ -140,7 +141,7 @@
       /**
        * 统计右侧所有分类1i的top的数组
        */
-      initTops (){
+      _initTops (){
         let tops = []
         let top = 0
         tops.push(top)
@@ -154,12 +155,30 @@
         this.tops = tops
         console.log('tops',tops);
       },
+
+      clickItem (index){
+        // 得到对应的top
+        let top = this.tops[index]
+        // 立即更新scrollY为目标值(立即选中当前分类项)
+        this.scrollY = top
+        // 让右侧列表滑动到对应位置
+        this.rightScroll.scrollTo(0,-top,300)
+      }
     },
     computed:{
       ...mapState(['goods']),
       currentIndex (){
         let {scrollY,tops} = this
-        return tops.findIndex((top,index)=>{ return scrollY >= top && scrollY < tops[index+1]})
+        let index = tops.findIndex((top,index)=>{ return scrollY >= top && scrollY < tops[index+1]})
+        
+        if(index!==this.index && this.leftScroll){
+          // 将新的下标保存起来
+          // this.index = index
+          // 让左侧列表滑动到当前分类处
+          let li = this.$refs.leftUl.children[index]
+          this.leftScroll.scrollToElement(li,300)
+        }
+        return index
       },
     },
     /* mounted() {
@@ -171,8 +190,8 @@
         this.$nextTick(()=>{    // 列表数据显示了
           /* new BScroll(this.$refs.left)
           new BScroll(this.$refs.right) */
-          this.initScroll() // 初始化滑动
-          this.initTops()
+          this._initScroll() // 初始化滑动
+          this._initTops()
         })
       },
     },
