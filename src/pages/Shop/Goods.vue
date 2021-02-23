@@ -26,10 +26,11 @@
           <!-- <h1 class="title">折扣</h1> -->
           <h1 class="title">{{good.name}}</h1>
           <ul>
-            <li class="food-item bottom-border-1px" v-for="(food,index) in good.foods" :key="index">
+            <!-- <li class="food-item bottom-border-1px" v-for="(food,index) in good.foods" :key="index" @click="showFood(food)"> -->
+            <li class="food-item bottom-border-1px" v-for="(food,index) in good.foods" :key="index" >
               <div class="icon">
                 <!-- <img width="57" height="57"  src="http://fuss10.elemecdn.com/8/a6/453f65f16b1391942af11511b7a90jpeg.jpeg?imageView2/1/w/114/h/114"> -->
-                <img width="57" height="57"  :src="food.icon">
+                <img @click="showFood(food)" width="57" height="57"  :src="food.icon">
               </div>
               <div class="content">
                 <!-- <h2 class="name">南瓜粥</h2> -->
@@ -48,7 +49,8 @@
                   <span class="now" v-if="food.oldPrice">￥{{food.oldPrice}}</span>
                 </div>
                 <div class="cartcontrol-wrapper">
-                  CartControl组件
+                  <!-- CartControl组件 -->
+                  <CartControl :food="food"/>
                 </div>
               </div>
             </li>
@@ -102,19 +104,24 @@
       </ul>
     </div>
   </div>
+  <!-- 1. <Food :food="food" v-show="isShowFood" />  -->
+  <!-- 组件标签对象就是组件对象 -->
+  <Food :food="food" ref="food" />
 </div>
 </template>
 
 <script type="text/ecmascript-6">
   import BScroll from 'better-scroll'
   import {mapState} from 'vuex'
+  import Food from '../../components/Food/Food.vue'
   export default {
     data() {
       return {
         // 1)、右侧列表滑动的Y轴坐标: scrollY  在华东中过程中不断改变
         scrollY:0,
         // 2)、右侧每个分类<li>的top值的数组tops：第一次列表显示后统计后面不再变化
-        tops:[]
+        tops:[],
+        food:{}   // 需要显示的food
       }
     },
     methods: {
@@ -163,6 +170,17 @@
         this.scrollY = top
         // 让右侧列表滑动到对应位置
         this.rightScroll.scrollTo(0,-top,300)
+      },
+
+      /**
+       * 父组件调用子组件的方法: ref
+       * 子组件调用父组件的方法: props
+       */
+      showFood (food){
+        // 更新数据
+        this.food = food
+        // 显示food组件界面
+        this.$refs.food.toggleShow()
       }
     },
     computed:{
@@ -194,6 +212,9 @@
           this._initTops()
         })
       },
+    },
+    components:{
+      Food:Food
     },
   }
 </script>

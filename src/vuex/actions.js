@@ -7,7 +7,7 @@
  // 引入接口请求函数
  import {reqAddress,reqFoodsCategorys,reqShops,reqAutoLogin,reqGoods,reqRatings,reqInfo} from '../api/index.js'
  //引入常量
- import {RECEIVE_ADDRESS,RECEIVE_CATEGORYS,RECEIVE_SHOPS,RECEIVE_TOKEN,RECEIVE_USER,RESET_USER,RESET_TOKEN,RECEIVE_GOODS,RECEIVE_RATINGS,RECEIVE_INFO} from './mutation-types.js'
+ import {RECEIVE_ADDRESS,RECEIVE_CATEGORYS,RECEIVE_SHOPS,RECEIVE_TOKEN,RECEIVE_USER,RESET_USER,RESET_TOKEN,RECEIVE_GOODS,RECEIVE_RATINGS,RECEIVE_INFO,ADD_FOOD_COUNT,REDUCE_FOOD_COUNT} from './mutation-types.js'
 
 export default {
     /*
@@ -125,6 +125,15 @@ export default {
             let info = result.data
             commit(RECEIVE_INFO,{info})
             typeof cb === 'function' && cb()
+        }
+    },
+
+    // 更新food中的数量的同步action
+    updateFoodCount ({commit},{isAdd,food}){
+        if(isAdd){
+            commit(ADD_FOOD_COUNT,{food})
+        }else{
+            commit(REDUCE_FOOD_COUNT,{food})
         }
     },
 
