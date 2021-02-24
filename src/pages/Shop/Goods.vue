@@ -26,11 +26,12 @@
           <!-- <h1 class="title">折扣</h1> -->
           <h1 class="title">{{good.name}}</h1>
           <ul>
-            <!-- <li class="food-item bottom-border-1px" v-for="(food,index) in good.foods" :key="index" @click="showFood(food)"> -->
-            <li class="food-item bottom-border-1px" v-for="(food,index) in good.foods" :key="index" >
+            <!-- <li class="food-item bottom-border-1px" v-for="(food,index) in good.foods" :key="index" > --> 
+            <li class="food-item bottom-border-1px" v-for="(food,index) in good.foods" :key="index" @click="showFood(food)">  
               <div class="icon">
                 <!-- <img width="57" height="57"  src="http://fuss10.elemecdn.com/8/a6/453f65f16b1391942af11511b7a90jpeg.jpeg?imageView2/1/w/114/h/114"> -->
-                <img @click="showFood(food)" width="57" height="57"  :src="food.icon">
+                <!-- <img @click="showFood(food)" width="57" height="57"  :src="food.icon"> -->
+                <img width="57" height="57"  :src="food.icon">
               </div>
               <div class="content">
                 <!-- <h2 class="name">南瓜粥</h2> -->
@@ -184,7 +185,11 @@
       }
     },
     computed:{
-      ...mapState(['goods']),
+      // ...mapState(['goods']),
+      ...mapState({
+        goods: state => state.shop.goods
+      }),
+
       currentIndex (){
         let {scrollY,tops} = this
         let index = tops.findIndex((top,index)=>{ return scrollY >= top && scrollY < tops[index+1]})

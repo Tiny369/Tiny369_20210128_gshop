@@ -9,11 +9,20 @@ import Star from './components/Star/Star.vue'
 import CartControl from './components/CartControl/CartControl.vue'
 import store from './vuex/store.js'
 import { Button } from 'mint-ui'
+import VueLazyload from 'vue-lazyload'
 
 import * as API from './api/index.js'
 import i18n from './i18n'
 import './mock/mock_server.js'
+import loading from './common/images/loading.gif'
 
+Vue.use(VueLazyload, {
+    /* preLoad: 1.3,
+    error: 'dist/error.png',
+    loading: 'dist/loading.gif',
+    attempt: 1 */
+    loading     // 在要显示的图片没有加载到前显示
+})  // 内部定义一个全局指令: 1azy
 
 //取消生产环境的提示
 Vue.config.productionTip = false

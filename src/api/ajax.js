@@ -33,7 +33,8 @@ instance.interceptors.request.use((config)=>{
     }
 
     // 5.通过请求头携带token数据
-    let token = store.state.token
+    // let token = store.state.token
+    let token = store.state.user.token
 
     // 有token就携带
     if(token){

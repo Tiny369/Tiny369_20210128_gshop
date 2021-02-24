@@ -3,7 +3,9 @@
     <div class="food-content" >
       <div class="image-header">
         <!-- <img src="http://fuss10.elemecdn.com/8/a6/453f65f16b1391942af11511b7a90jpeg.jpeg?imageView2/1/w/750/h/750"> -->
-        <img :src="food.image">
+        <!-- <img :src="food.image"> -->
+        <!-- <img v-lazy="food.image"> -->
+        <img v-if="isShow" v-lazy="food.image">
         <!-- <p class="foodpanel-desc">主、辅料:水、大米、南瓜、冰糖等</p> -->
         <p class="foodpanel-desc">{{food.info}}</p>
         <!-- <div class="back"> -->
