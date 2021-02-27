@@ -16,17 +16,30 @@
     import throttle from 'lodash/throttle'    // 按需引入
     export default {
         props:{
-            food:Object
+          food:Object
         },
         methods: {
-            updateFoodCount: throttle(function (isAdd){   // 对处理事件的函数节流处理
-                /**
-                 * 问题1:不应该直接在此更新,这个不是当前组件的
-                 * 问题2:开始count值是undefined
-                 */
-                // this.food.count++
-                this.$store.dispatch('updateFoodCount',{isAdd,food:this.food})
-            },1000)
+          // 没节流限制
+          updateFoodCount2:  function (isAdd){   // 对处理事件的函数节流处理
+            console.log('add...');
+            /**
+             * 问题1:不应该直接在此更新,这个不是当前组件的
+             * 问题2:开始count值是undefined
+             */
+            // this.food.count++
+            this.$store.dispatch('updateFoodCount',{isAdd,food:this.food})
+          },
+
+          // 有节流限制
+          updateFoodCount: throttle(function (isAdd){   // 对处理事件的函数节流处理
+            console.log('add...');
+            /**
+             * 问题1:不应该直接在此更新,这个不是当前组件的
+             * 问题2:开始count值是undefined
+             */
+            // this.food.count++
+            this.$store.dispatch('updateFoodCount',{isAdd,food:this.food})
+          },1000,{trailing:false})  // options配置{}:在1s内多次点击，只响应第一次点击(默认是相应2次，且第2是在过了1s后才响应)
         },
     }
 </script>

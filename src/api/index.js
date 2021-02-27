@@ -67,3 +67,7 @@ export const reqRatings =  ()=>axios.get('/ratings')
 export const reqInfo =  ()=>axios.get('/info')
 
 
+// 获取指定shop
+export const reqShop =  (id)=>axios.get('/shop/'+ id)
+// reqShop(123)
+

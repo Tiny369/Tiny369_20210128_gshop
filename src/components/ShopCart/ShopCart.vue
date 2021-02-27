@@ -34,7 +34,8 @@
         <div class="shopcart-list" v-show="listShow">
             <div class="list-header">
                 <h1 class="title">购物车</h1>
-                <span class="empty">清空</span>
+                <!-- <span class="empty">清空</span> -->
+                <span class="empty" @click="clearCartFoods">清空</span>
             </div>
             <div class="list-content" ref="foods">
                 <!-- <ul>
@@ -74,6 +75,8 @@
 <script type="text/ecmascript-6">
     import {mapState,mapGetters} from 'vuex'
     import BScroll from 'better-scroll'
+    import { MessageBox } from 'mint-ui';
+    import {CLEAR_CART_FOODLIST} from '../../vuex/mutation-types.js'
     export default {
       data() {
         return {
@@ -90,12 +93,19 @@
         },
         isShowFalse (){
           this.isShow = false
-        }
+        },
+        // 清空购物车
+        clearCartFoods (){
+          MessageBox.confirm('确认清空购物车吗？').then(()=>{
+            this.$store.commit(CLEAR_CART_FOODLIST)
+          })
+        },
       },
       computed:{
         ...mapState({
           cartFoods: state => state.shop.cartFoods,
-          info: state => state.shop.info
+          // info: state => state.shop.info
+          info: state => state.shop.shop.info || {}
         }),
         ...mapGetters(['totalCount','totalPrice']),
         payClass (){

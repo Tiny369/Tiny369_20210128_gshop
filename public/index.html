@@ -23,6 +23,16 @@
       }, false);
     }
   </script>
+
+  <!-- 解决：无法阻止被动事件监听器内部的默认，因为目标被视为被动
+    [Intervention] Unable to preventDefault inside passive event listener due to target being treated as passive. See
+  -->
+  <style>
+    * {
+      touch-action:pan-y;
+    }
+  </style>
+  
 </head>
 
 <body>

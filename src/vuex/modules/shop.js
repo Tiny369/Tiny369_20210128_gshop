@@ -4,28 +4,32 @@
 import Vue from 'vue'
 
 import {
-    reqGoods,
+    /* reqGoods,
     reqRatings,
-    reqInfo
+    reqInfo, */
+    reqShop
 } from '../../api/index.js'
 
 import {
-    RECEIVE_GOODS,
+    /* RECEIVE_GOODS,
     RECEIVE_RATINGS,
-    RECEIVE_INFO,
+    RECEIVE_INFO, */
     ADD_FOOD_COUNT,
-    REDUCE_FOOD_COUNT
+    REDUCE_FOOD_COUNT,
+    CLEAR_CART_FOODLIST,
+    RECEIVE_SHOP, 
 } from '../mutation-types.js'
 
 export default {
     state:{
-        goods: [], // 商品列表
+       /*  goods: [], // 商品列表
         ratings: [], // 商家评价列表
-        info: {}, // 商家信息
+        info: {}, // 商家信息 */
+        shop:{},    // 当前商家
         cartFoods:[]    // 购物车中所有的food数组
     },
     mutations:{
-        [RECEIVE_GOODS] (state,{goods}){
+        /* [RECEIVE_GOODS] (state,{goods}){
             state.goods = goods
         },
         [RECEIVE_RATINGS] (state,{ratings}){
@@ -33,6 +37,15 @@ export default {
         },
         [RECEIVE_INFO] (state,{info}){
             state.info = info
+        }, */
+        
+        /**
+         * 1.接收一个新的数据
+         * 2.重置数据：利用形参默认值
+         */
+        [RECEIVE_SHOP] (state,{shop={},cartFoods=[]}){
+            state.shop = shop
+            state.cartFoods = cartFoods
         },
     
         [ADD_FOOD_COUNT] (state,{food}){
@@ -59,9 +72,17 @@ export default {
                 }
             }
         },
+        [CLEAR_CART_FOODLIST] (state){
+            //  将cartFoods中所有food的count变为0
+            state.cartFoods.forEach(food => {
+                food.count = 0
+            });
+            // 重置购物车数组
+            state.cartFoods = []
+        },
     },
     actions:{
-        // 异步获取商家商品列表
+        /* // 异步获取商家商品列表
         async getGoods ({commit},cb){
             let result = await reqGoods()
             if(result.code === 0){
@@ -86,6 +107,28 @@ export default {
                 let info = result.data
                 commit(RECEIVE_INFO,{info})
                 typeof cb === 'function' && cb()
+            }
+        }, */
+        /**
+         * 根据id获取对应商家的异步action
+         */
+        async getShop ({commit,state},id){
+            // 如果指定id与原有的商家id相同，不需要发请求
+            if(id==state.shop.id){
+                return
+            }
+
+            // 当前显示的是另一个商家，清除原本的数据
+            if(state.shop.id){
+                commit(RECEIVE_SHOP,{}) // 空容器中不带shop对象
+            }
+            // console.log('准备发请求');
+
+            // 发请求获取对应商家并更新数据
+            let result = await reqShop(id)
+            if(result.code === 0){
+                let shop = result.data
+                commit(RECEIVE_SHOP,{shop})
             }
         },
 

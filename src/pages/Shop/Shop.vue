@@ -3,13 +3,16 @@
     <ShopHeader></ShopHeader>
     <div class="tab">
         <div class="tab-item">
-            <router-link to="/shop/goods" replace>点餐</router-link>
+            <!-- <router-link to="/shop/goods" replace>点餐</router-link> -->
+            <router-link :to="`/shop/${id}/goods`" replace>点餐</router-link>
         </div>
         <div class="tab-item">
-            <router-link to="/shop/ratings" replace>评价</router-link>
+            <!-- <router-link to="/shop/ratings" replace>评价</router-link> -->
+            <router-link :to="`/shop/${id}/ratings`" replace>评价</router-link>
         </div>
         <div class="tab-item">
-            <router-link to="/shop/info" replace>商家</router-link>
+            <!-- <router-link to="/shop/info" replace>商家</router-link> -->
+            <router-link :to="`/shop/${id}/info`" replace>商家</router-link>
         </div>
     </div>
     <router-view></router-view>
@@ -19,14 +22,23 @@
 <script type="text/ecmascript-6">
     import ShopHeader from '../../components/ShopHeader/ShopHeader.vue'
     export default {
-        components:{
-            ShopHeader
-        },
-        mounted() {
-          this.$store.dispatch('getGoods')
-          this.$store.dispatch('getRatings')
-          this.$store.dispatch('getInfo')
-        },
+      props:['id'],
+      components:{
+        ShopHeader
+      },
+      mounted() {
+        /* this.$store.dispatch('getGoods')
+        this.$store.dispatch('getRatings')
+        this.$store.dispatch('getInfo') */
+
+        // 得到当前请求的商家ID
+        // let id = this.$route.params.id
+        let id = this.id
+        // console.log('id',id);
+
+        // 分发action请求商家数据
+        this.$store.dispatch('getShop',id)
+      },
     }
 </script>
 

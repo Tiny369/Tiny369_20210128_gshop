@@ -15,3 +15,8 @@ export const RECEIVE_INFO = 'receive_info'  // 接收商家信息
 export const ADD_FOOD_COUNT = 'add_food_count'  // 增加food的count
 export const REDUCE_FOOD_COUNT = 'reduce_food_count'  // 减少food的count
 
+export const CLEAR_CART_FOODLIST = 'clear_cart_foodlist'  // 清控购物车列表
+
+export const RECEIVE_SHOP = 'receive_shop'  // 接收商家
+
+
