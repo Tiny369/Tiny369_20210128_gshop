@@ -20,6 +20,8 @@ import {
     RECEIVE_SHOP, 
 } from '../mutation-types.js'
 
+import {getCartFoods} from '../../utils/index.js'
+
 export default {
     state:{
        /*  goods: [], // 商品列表
@@ -128,7 +130,9 @@ export default {
             let result = await reqShop(id)
             if(result.code === 0){
                 let shop = result.data
-                commit(RECEIVE_SHOP,{shop})
+                // 读取得到当前商家的购物车food数组
+                let cartFoods = getCartFoods(shop)
+                commit(RECEIVE_SHOP,{shop,cartFoods})
             }
         },
 

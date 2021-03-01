@@ -21,6 +21,8 @@
 
 <script type="text/ecmascript-6">
     import ShopHeader from '../../components/ShopHeader/ShopHeader.vue'
+    import {savaCartFoods} from '../../utils/index.js'
+    import {mapState} from 'vuex'
     export default {
       props:['id'],
       components:{
@@ -39,6 +41,22 @@
         // 分发action请求商家数据
         this.$store.dispatch('getShop',id)
       },
+      // 计算属性
+      computed:{
+        ...mapState({
+          shop: state => state.shop   // {shop:{},cartFoods:[]}
+        })
+      },
+
+      // 在退出当前商家界面时调用
+      beforeDestroy() {
+        let {shop:{id},cartFoods} = this.shop   // 多层解构
+        // 将当前商家的购物车数据保存
+        savaCartFoods(id,cartFoods)
+      },
+
+        
+      
     }
 </script>
 
