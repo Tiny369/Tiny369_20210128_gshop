@@ -40,6 +40,14 @@
 
         // 分发action请求商家数据
         this.$store.dispatch('getShop',id)
+
+        // 给窗口绑定一个卸载的监听
+        // window.onunload =  () => {}
+        window.addEventListener('unload',()=>{
+          let {shop:{id},cartFoods} = this.shop   // 多层解构
+          // 将当前商家的购物车数据保存
+          savaCartFoods(id,cartFoods)
+        })
       },
       // 计算属性
       computed:{
@@ -49,7 +57,8 @@
       },
 
       // 在退出当前商家界面时调用
-      beforeDestroy() {
+      beforeDestroy() {   // 在刷新界面时不会执行
+        // sessionStorage.setItem('beforeDestroy_key',2)
         let {shop:{id},cartFoods} = this.shop   // 多层解构
         // 将当前商家的购物车数据保存
         savaCartFoods(id,cartFoods)

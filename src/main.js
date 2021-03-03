@@ -7,6 +7,7 @@ import router from './router/index.js'
 import Header from './components/Header/Header.vue'
 import Star from './components/Star/Star.vue'
 import CartControl from './components/CartControl/CartControl.vue'
+import Split from './components/Split/Split.vue'
 import store from './vuex/store.js'
 import { Button } from 'mint-ui'
 import VueLazyload from 'vue-lazyload'
@@ -15,6 +16,7 @@ import * as API from './api/index.js'
 import i18n from './i18n'
 import './mock/mock_server.js'
 import loading from './common/images/loading.gif'
+import './filters/index.js'
 
 Vue.use(VueLazyload, {
     /* preLoad: 1.3,
@@ -30,6 +32,7 @@ Vue.config.productionTip = false
 Vue.component('Header',Header)
 Vue.component('Star',Star)
 Vue.component('CartControl',CartControl)
+Vue.component('Split',Split)
 Vue.component(Button.name, Button)  //  mt-button
 
 // 将包含所有接口请求函数方法的对象保存到Vue原型对象上

@@ -162,12 +162,18 @@ export default {
             });
             return arr
         }, */
-
+        /* 总数量 */
         totalCount (state){
             return state.cartFoods.reduce((pre,food) => pre + food.count,0)
         },
+        /* 总价格 */
         totalPrice (state){
             return state.cartFoods.reduce((pre,food) => pre + food.count*food.price,0)
+        },
+        /* 推荐评价总数量 */
+        positiveSize (state){
+            const ratings = state.shop.ratings
+            return !ratings ? 0 : ratings.reduce((total, rating) => total + (rating.rateType===0 ? 1 : 0), 0)
         },
     }
 }
