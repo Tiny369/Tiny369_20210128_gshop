@@ -1,10 +1,36 @@
 /**
  * 所有路由配置的数组
  */
-import Msite from '../pages/MSite/MSite.vue'
+
+// 静态引入：打包时引入
+/* import Msite from '../pages/MSite/MSite.vue'    // 静态引入：打包时引入
 import Search from '../pages/Search/Search.vue'
 import Order from '../pages/Order/Order.vue'
-import Profile from '../pages/Profile/Profile.vue'
+import Profile from '../pages/Profile/Profile.vue' */
+
+/**
+ * 路由组件懒加载：
+ *      1.在打包时路由组件会被单独打包(代码分割：code split)
+ *      2.默认不请求加载路由组件打包文件，当请求需要路由组件时才请求加载
+ *      
+ * 1.import动态引入：
+ *      import(模块路径)
+ *      结果：被引入的模块会被单独打包(代码分割：code split)
+ * 2.配置的路由组件是函数(返回动态加载的路由组件模块)
+ *      函数开始是不执行(开始不加载【请求】单独打包的路由组件模块代码)
+ *      当请求对应路径需要显示组件界面时，去加载路由组件打包文件
+ * 
+ * 作用：减小首屏需要加载的js文件 ==> 显示更快(用户体验更好)
+ */
+let Msite = () =>  import('../pages/MSite/MSite.vue')    // 动态引入
+let Search = () => import('../pages/Search/Search.vue')
+let Order = () => import('../pages/Order/Order.vue') 
+let Profile = () => import('../pages/Profile/Profile.vue') 
+
+import A from '../pages/test/A.vue'
+import B from '../pages/test/B.vue'
+
+
 import Login from '../pages/Login/Login.vue'
 import Shop from '../pages/Shop/Shop.vue'
 import Goods from '../pages/Shop/Goods.vue'
@@ -36,6 +62,7 @@ export default [
     {
         path:'/profile',
         component:Profile,
+        // component:() => import('../pages/Profile/Profile.vue'),
         meta:{
             isFooterGuide:true
         }
@@ -76,6 +103,15 @@ export default [
                 redirect:'goods'
             },
         ]
+    },
+
+    {
+        path:'/a',
+        component:A
+    },
+    {
+        path:'/b',
+        component:B
     },
 
     {
