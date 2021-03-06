@@ -184,6 +184,25 @@
 
       },
 
+      /**
+       * 功能：利用组件前置守卫_登陆界面的登陆检查
+       * 在当前组件对象被创建前调用, 不能直接访问this(不是组件对象)
+       * 但可以通过next(component => {}), 在回调函数中访问组件对象
+       */
+      beforeRouteEnter (to, from, next) {   // 该方法this比较特殊,
+      // 通过 `vm` 访问组件实例
+        next((vm)=>{    // 回调函数在组件对象创建后回调执行,并传入组件对象
+          let token = vm.$store.state.user.token   
+          // 判断是否登录,如果已经登录，强制跳转到个人中心 
+          if(token){  
+            next('/profile')
+          }else{  
+          // 否则放行
+            next()
+          }
+        })
+      },
+
     }
 </script>
 

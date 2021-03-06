@@ -29,6 +29,8 @@ let Profile = () => import('../pages/Profile/Profile.vue')
 
 import A from '../pages/test/A.vue'
 import B from '../pages/test/B.vue'
+import B1 from '../pages/test/B1.vue'
+import B2 from '../pages/test/B2.vue'
 
 
 import Login from '../pages/Login/Login.vue'
@@ -111,7 +113,17 @@ export default [
     },
     {
         path:'/b',
-        component:B
+        component:B,
+        children:[
+            {
+                path:'/b/B1',
+                component:B1
+            },
+            {
+                path:'/b/B2',
+                component:B2
+            },
+        ]
     },
 
     {
