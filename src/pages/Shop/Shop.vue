@@ -24,6 +24,7 @@
     import {savaCartFoods} from '../../utils/index.js'
     import {mapState} from 'vuex'
     export default {
+      name:'Shop',
       props:['id'],
       components:{
         ShopHeader

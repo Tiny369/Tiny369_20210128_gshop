@@ -39,6 +39,10 @@ import Goods from '../pages/Shop/Goods.vue'
 import Ratings from '../pages/Shop/Ratings.vue'
 import Info from '../pages/Shop/Info.vue'
 
+
+import Review from '../pages/Review/Review.vue'
+import SlotTest from '../pages/Review/SlotTest/SlotTest.vue'
+
 export default [
     {
         path:'/msite',
@@ -130,5 +134,18 @@ export default [
         path:'/',
         redirect:'/msite'
     },
+
+
+
+    {
+        path:'/review',
+        component:Review,
+        children:[
+            {
+                path: '/review/slot',
+                component: SlotTest
+            },
+        ]
+    }
     
 ]

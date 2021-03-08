@@ -1,7 +1,7 @@
 <template>
   <div>
       <!-- exclude申明的组件不会被缓存 -->
-      <keep-alive exclude="Search">     <!-- 在它管理的路由间进行切换，不会死亡 -->
+      <keep-alive exclude="Search,Shop">     <!-- 在它管理的路由间进行切换，不会死亡 -->
         <router-view></router-view>   
       </keep-alive>
       
