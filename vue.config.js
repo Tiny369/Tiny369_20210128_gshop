@@ -9,7 +9,7 @@ const px2rem = require('postcss-px2rem')  //postcss的一个插件
 module.exports = {
     //只能写vue封装的配置
 
-    // runtimeCompiler:true,   //支持 template:'<App />' 编译  但是会多出10多Kb
+    runtimeCompiler:true,   //支持 template:'<App />' 编译  但是会多出10多Kb
     // lintOnSave:false,     //关闭Eslint规则
     css: {//添加postcss配置
         loaderOptions: {

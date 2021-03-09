@@ -42,6 +42,8 @@ import Info from '../pages/Shop/Info.vue'
 
 import Review from '../pages/Review/Review.vue'
 import SlotTest from '../pages/Review/SlotTest/SlotTest.vue'
+import MixinTest from '../pages/Review/MixinTest/MixinTest.vue'
+import ComponentTest from '../pages/Review/ComponentTest/ComponentTest.vue'
 
 export default [
     {
@@ -144,6 +146,14 @@ export default [
             {
                 path: '/review/slot',
                 component: SlotTest
+            },
+            {
+                path: '/review/mixin',
+                component: MixinTest
+            },
+            {
+                path: '/review/component',
+                component: ComponentTest
             },
         ]
     }
