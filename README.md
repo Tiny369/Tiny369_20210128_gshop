@@ -24,5 +24,5 @@ npm run lint
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ## explain
-tiny update T 20210309 21:30
+tiny update Time 20210309 21：40
 
