@@ -3,7 +3,7 @@
     <h1>EventTest组件</h1>
     <button @click="test1">测试原生事件</button>
 
-    <hr>    <!-- 组件标签 自定义事件 添加.native为原生事件 -->
+    <hr>    <!-- 组件标签  添加.native绑定原生事件 自定义事件 -->
     <Event1 @click.native="test2"></Event1>
 
    <hr>
