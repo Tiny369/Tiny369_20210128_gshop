@@ -44,6 +44,7 @@ import Review from '../pages/Review/Review.vue'
 import SlotTest from '../pages/Review/SlotTest/SlotTest.vue'
 import MixinTest from '../pages/Review/MixinTest/MixinTest.vue'
 import ComponentTest from '../pages/Review/ComponentTest/ComponentTest.vue'
+import EventTest from '../pages/Review/EventTest/EventTest.vue'
 
 export default [
     {
@@ -154,6 +155,10 @@ export default [
             {
                 path: '/review/component',
                 component: ComponentTest
+            },
+            {
+                path: '/review/event',
+                component: EventTest
             },
         ]
     }
