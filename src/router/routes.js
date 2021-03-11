@@ -45,6 +45,8 @@ import SlotTest from '../pages/Review/SlotTest/SlotTest.vue'
 import MixinTest from '../pages/Review/MixinTest/MixinTest.vue'
 import ComponentTest from '../pages/Review/ComponentTest/ComponentTest.vue'
 import EventTest from '../pages/Review/EventTest/EventTest.vue'
+import ModelTest from '../pages/Review/ModelTest/ModelTest.vue'
+import ReactiveTest from '../pages/Review/ReactiveTest/ReactiveTest.vue'
 
 export default [
     {
@@ -160,6 +162,16 @@ export default [
                 path: '/review/event',
                 component: EventTest
             },
+            {
+                path: '/review/model',
+                component: ModelTest
+            },
+            {
+                path: '/review/reactive',
+                component: ReactiveTest
+            },
+
+            
         ]
     }
     
