@@ -47,6 +47,7 @@ import ComponentTest from '../pages/Review/ComponentTest/ComponentTest.vue'
 import EventTest from '../pages/Review/EventTest/EventTest.vue'
 import ModelTest from '../pages/Review/ModelTest/ModelTest.vue'
 import ReactiveTest from '../pages/Review/ReactiveTest/ReactiveTest.vue'
+import LifeTest from '@/pages/Review/LifeTest/LifeTest.vue'
 
 export default [
     {
@@ -169,6 +170,10 @@ export default [
             {
                 path: '/review/reactive',
                 component: ReactiveTest
+            },
+            {
+                path: '/review/life',
+                component: LifeTest
             },
 
             
