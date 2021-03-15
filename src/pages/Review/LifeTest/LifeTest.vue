@@ -48,13 +48,13 @@
       console.log('mounted()', this.$refs.title)
     },
 
-    beforeUpdate () {
+    beforeUpdate () { // 数据更新后，界面更新前
       console.log('beforeUpdate()', this.title, this.$refs.title.textContent)
     },
 
     // 更新界面
 
-    updated () {
+    updated () {  // 界面更新后
       console.log('updated()', this.title, this.$refs.title.textContent)
     },
 
